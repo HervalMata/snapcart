@@ -7,7 +7,21 @@ export async function POST(req:NextRequest) {
     try {
         await connectDb()
         const {name, email, password} = await req.json()
-        const existUser = await User.findOne({ email })
+        if (typeof name !== "string" || !name.trim()) {
+            return NextResponse.json(
+                {message: "O nome é obrigatório!"},
+                {status: 400}
+            )
+        }
+        if (typeof email !== "string" || !email.trim()) {
+            return NextResponse.json(
+                {message: "O email é obrigatório!"},
+                {status: 400}
+            )
+        }
+        const safeName = name.trim()
+        const safeEmail = email.trim()
+        const existUser = await User.findOne({ email: safeEmail })
         if (existUser) {
             return NextResponse.json(
                 {message: "Email já existe!"},
@@ -24,8 +38,8 @@ export async function POST(req:NextRequest) {
         let user
         try {
             user = await User.create({
-                name, 
-                email, 
+                name: safeName, 
+                email: safeEmail, 
                 password: hashedPassword
             })
         } catch (error: any) {
