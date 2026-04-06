@@ -18,18 +18,24 @@ function RegisterForm({ previousStep }: propType) {
     const [password, setPassword] = useState("")
     const [showPassword,setShowPassword] = useState(false)
     const [loading, setLoading] = useState(false)
+    const [error, setError] = useState("")
     const router = useRouter()
+    const formValidation = name !== "" && email !== "" && password !== ""
 
     const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault()
         setLoading(true)
+        setError("")
         try {
             const result = await axios.post("/api/auth/register", {
                 name, email, password
             })
             setLoading(false)
+            router.push("/login")
         } catch (error) {
             console.log(error)
+            const message = error?.response?.data?.message || "Falha ao cadastrar"
+            setError(message)
             setLoading(false)
         }
     }
@@ -109,33 +115,31 @@ function RegisterForm({ previousStep }: propType) {
                         : <EyeIcon className="absolute right-3 top-3.75 w-5 h-5 text-pink-500 cursor-pointer" onClick={() => setShowPassword(true)} />
                     }
                 </div>
-                {
-                    (() => {
-                        const formValidation = name !== "" && email !== "" && password !== ""
-                        return <button
-                            className={`w-full font-semibold py-3b rounded-xl transition-all duration-200 shadow-md inline-flex items-center justify-center gap-2 ${
-                                formValidation
-                                    ? "bg-pink-600 hover:bg-pink-700 text-white"
-                                    : "bg-gray-300 text-gray-500 cursor-pointer-not-allowed"
-                            }`}
-                        >
-                            {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Cadastrar"}
-                        </button>
-                    }) ()
-                }
+                <button
+                    disabled={!formValidation || loading}
+                    className={`w-full font-semibold py-3 rounded-xl transition-all duration-200 shadow-md inline-flex items-center justify-center gap-2 ${
+                        formValidation
+                            ? "bg-pink-600 hover:bg-pink-700 text-white"
+                            : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                    }`}
+                >
+                    {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Cadastrar"}
+                </button>
+
                 <div className="flex items-center gap-2 text-gray-400 text-sm mt-2">
                     <span className="flex-1 h-px bg-gray-200"></span>
                     OU
                     <span className="flex-1 h-px bg-gray-200"></span>
                 </div>
                 <button 
+                    onClick={() => signIn("google")}
                     disabled={!formValidation || loading}
                     className="w-full flex items-center justify-center gap-3 border border-gray-300 hover:bg-gray-50 py-3 rounded-xl text-gray-700 font-medium transition-all duration-200">
                     <Image src={googleImage} width={20} height={20} alt='Google' />
                     Continuar com Google
                 </button>
             </motion.form>
-            <p onClick={() => router.push("/login")} className="cursor-pointer text-gray-600 mt-6 text-sm flex items-center gap-1">Já tem uma conta ? <Login className="w-4 h-4" /> <span className="text-pink-400"> Cadastrar-se</span></p>
+            <p onClick={() => router.push("/login")} className="cursor-pointer text-gray-600 mt-6 text-sm flex items-center gap-1">Já tem uma conta ? <Login className="w-4 h-4" /> <span className="text-pink-400"> Entre</span></p>
         </div>
     )
 }

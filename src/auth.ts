@@ -30,9 +30,29 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                     role: user.role
                 }
         }
+        }),
+        Google({
+            clientId: process.env.GOOGLE_CLIENT_ID,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
         })
     ],
     callbacks: {
+        async signIn(user, account) {
+            if (account?.provider == "google") {
+                await connectDb
+                let dbUser = await User.findOne({ email: user.emaisl })
+                if (!dbUser) {
+                    dbUser = User.create({
+                        name: user.name,
+                        email: user.email,
+                        image: user.image,
+                    })
+                }
+                user.id = dbUser._id.toString()
+                user.role = dbUser.role
+            }
+            return true
+        },
         jwt({ token, user }) {
             if (user) {
                 token.id = user.id
@@ -46,7 +66,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             if (session.user) {
                 session.user.id = token.id as string
                 session.user.name = token.name as string
-                session.user.email = token.name as string
+                session.user.email = token.email as string
                 session.user.role = token.role as string
             }
             return session
