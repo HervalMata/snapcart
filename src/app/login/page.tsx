@@ -7,25 +7,22 @@ import Image from 'next/image'
 import googleImage from "@/assets/google.png"
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
+import { signIn, useSession } from '@/auth'
 
-type propType = {
-    previousStep: (s: number) => void
-}
-
-function RegisterForm({ previousStep }: propType) {
-    const [name, setName] = useState("")
+function Login() {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [showPassword,setShowPassword] = useState(false)
     const [loading, setLoading] = useState(false)
     const router = useRouter()
+    const session = useSession()
 
-    const handleRegister = async (e: React.FormEvent) => {
+    const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault()
         setLoading(true)
         try {
-            const result = await axios.post("/api/auth/register", {
-                name, email, password
+            await signIn("credentials", {
+                email, password
             })
             setLoading(false)
         } catch (error) {
@@ -36,13 +33,6 @@ function RegisterForm({ previousStep }: propType) {
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen px-6 py-10 bg-white relative">
-            <div 
-                className="absolute top-6 left-6 flex items-center gap-2 text-pink-700 hover:text-pink-800 transition-colors cursor-pointer"
-                onClick={() => previousStep(1)}
-            >
-                <ArrowLeft className="w-5 h-5" />
-                <span className="font-medium">Voltar</span>
-            </div>
             <motion.h1 
                 initial={{
                     y: 10,
@@ -57,13 +47,13 @@ function RegisterForm({ previousStep }: propType) {
                 }}
                 className="text-4xl font-extrabold text-pink-700 mb-2"
             >
-                Criar Conta
+                Bemvindo de volta
             </motion.h1>
             <p className="text-gray-600 mb-8 flex items-center">
-                Junte-se ao SnapCart agora <Leaf className="w-5 h-5 text-pink-600" />
+                Entre <Leaf className="w-5 h-5 text-pink-600" />
             </p>
             <motion.form
-                onSubmit={handleRegister}
+                onSubmit={handleLogin}
                 initial={{
                     opacity: 0,
                 }}
@@ -111,7 +101,7 @@ function RegisterForm({ previousStep }: propType) {
                 </div>
                 {
                     (() => {
-                        const formValidation = name !== "" && email !== "" && password !== ""
+                        const formValidation = email !== "" && password !== ""
                         return <button
                             className={`w-full font-semibold py-3b rounded-xl transition-all duration-200 shadow-md inline-flex items-center justify-center gap-2 ${
                                 formValidation
@@ -119,7 +109,7 @@ function RegisterForm({ previousStep }: propType) {
                                     : "bg-gray-300 text-gray-500 cursor-pointer-not-allowed"
                             }`}
                         >
-                            {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Cadastrar"}
+                            {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Entrar"}
                         </button>
                     }) ()
                 }
@@ -135,9 +125,9 @@ function RegisterForm({ previousStep }: propType) {
                     Continuar com Google
                 </button>
             </motion.form>
-            <p onClick={() => router.push("/login")} className="cursor-pointer text-gray-600 mt-6 text-sm flex items-center gap-1">Já tem uma conta ? <Login className="w-4 h-4" /> <span className="text-pink-400"> Cadastrar-se</span></p>
+            <p onClick={() => router.push("/register")} className="cursor-pointer text-gray-600 mt-6 text-sm flex items-center gap-1">Quer criar uma conta ? <Login className="w-4 h-4" /> <span className="text-pink-400"> Entrar</span></p>
         </div>
     )
 }
 
-export default RegisterForm
+export default Login

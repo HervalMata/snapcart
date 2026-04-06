@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import Provider from "@/Provider";
 
 export const metadata: Metadata = {
   title: "SnapCart",
@@ -15,7 +16,11 @@ export default function RootLayout({
     <html
       lang="en"
     >
-      <body className="w-full min-h-screen bg-linear-to-b from-pink-200 to-white">{children}</body>
+      <body className="w-full min-h-screen bg-linear-to-b from-pink-200 to-white">
+        <Provider>
+          {children}
+        </Provider>
+      </body>
     </html>
   );
 }
