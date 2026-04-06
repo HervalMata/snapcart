@@ -35,19 +35,19 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     callbacks: {
         jwt({ token, user }) {
             if (user) {
-                token.id = user.id,
-                token.name = user.name,
-                token.email = user.email,
-                token.role = user.role,
+                token.id = user.id
+                token.name = user.name
+                token.email = user.email
+                token.role = user.role
             }
             return token
         },
         session({ session, token }) {
             if (session.user) {
-                session.user.id = token.id as string,
-                session.user.name = token.name as string,
-                session.user.email = token.name as string,
-                session.user.role = token.role as string,
+                session.user.id = token.id as string
+                session.user.name = token.name as string
+                session.user.email = token.name as string
+                session.user.role = token.role as string
             }
             return session
         }
@@ -58,7 +58,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
     session: {
         strategy: "jwt",
-        maxAge: 10 * 24 * 60 * 60 * 1000
+        maxAge: 10 * 24 * 60 * 60
     },
     secret: process.env.AUTH_SECRET
 })
