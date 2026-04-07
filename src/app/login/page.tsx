@@ -1,19 +1,21 @@
 "use client"
 
 import React, { useState } from 'react'
-import { ArrowLeft, Leaf, User, Mail, Lock, EyeOff, EyeIcon, Login, Loader2 } from 'lucide-react'
+import { ArrowLeft, Leaf, User, Mail, Lock, EyeOff, Eye, Login, Loader2 } from 'lucide-react'
 import { motion } from 'motion'
 import Image from 'next/image'
 import googleImage from "@/assets/google.png"
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
-import { signIn, useSession } from '@/auth'
+import { signIn, useSession } from 'next-auth/react'
+import Link from "next/link"
 
 function Login() {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [showPassword,setShowPassword] = useState(false)
     const [loading, setLoading] = useState(false)
+    const isFormValid = email.trim() != "" && password.trim() !== ""
     const router = useRouter()
     const session = useSession()
 
@@ -21,12 +23,15 @@ function Login() {
         e.preventDefault()
         setLoading(true)
         try {
-            await signIn("credentials", {
-                email, password
+            const result = await signIn("credentials", {
+                email, password, redirect: false
             })
-            setLoading(false)
+            if (result?.error) {
+                return
+            }
         } catch (error) {
             console.log(error)
+        } finally {
             setLoading(false)
         }
     }
@@ -66,16 +71,6 @@ function Login() {
                 className="flex flex-col gap-5 w-full max-w-sm"
             >
                 <div className="relative">
-                    <User className="absolute left-3.5 top-3.75 w-5 h-5 text-gray-400" />
-                    <input 
-                        type="text" 
-                        placeholder="Digite seu nome" 
-                        className="w-full border border-gray-300 rounded-xl py-3 pl-10 pr-4 text-gray-800 focus:ring-2 focus:ring-pink-500 focus:outline-none" 
-                        onChange={(e) => setName(e.target.value)}
-                        value={name}
-                    />
-                </div>
-                <div className="relative">
                     <Mail className="absolute left-3.5 top-3.75 w-5 h-5 text-gray-400" />
                     <input 
                         type="email" 
@@ -96,36 +91,37 @@ function Login() {
                     />
                     { showPassword 
                         ? <EyeOff className="absolute right-3 top-3.75 w-5 h-5 text-pink-500 cursor-pointer" onClick={() => setShowPassword(false)} /> 
-                        : <EyeIcon className="absolute right-3 top-3.75 w-5 h-5 text-pink-500 cursor-pointer" onClick={() => setShowPassword(true)} />
+                        : <Eye className="absolute right-3 top-3.75 w-5 h-5 text-pink-500 cursor-pointer" onClick={() => setShowPassword(true)} />
                     }
                 </div>
-                {
-                    (() => {
-                        const formValidation = email !== "" && password !== ""
-                        return <button
-                            className={`w-full font-semibold py-3b rounded-xl transition-all duration-200 shadow-md inline-flex items-center justify-center gap-2 ${
-                                formValidation
+                <button
+                    type="submit"
+                    disabled={!isFormValid || loading}
+                    className={`w-full font-semibold py-3b rounded-xl transition-all duration-200 shadow-md inline-flex items-center justify-center gap-2 ${
+                                isFormValid
                                     ? "bg-pink-600 hover:bg-pink-700 text-white"
                                     : "bg-gray-300 text-gray-500 cursor-pointer-not-allowed"
-                            }`}
-                        >
-                            {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Entrar"}
-                        </button>
-                    }) ()
-                }
+                    }`}
+                >
+                    {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Entrar"}
+                </button>
                 <div className="flex items-center gap-2 text-gray-400 text-sm mt-2">
                     <span className="flex-1 h-px bg-gray-200"></span>
                     OU
                     <span className="flex-1 h-px bg-gray-200"></span>
                 </div>
                 <button 
-                    disabled={!formValidation || loading}
+                    type="button"
+                    disabled={loading}
+                    onClick={() => signIn("google")}
                     className="w-full flex items-center justify-center gap-3 border border-gray-300 hover:bg-gray-50 py-3 rounded-xl text-gray-700 font-medium transition-all duration-200">
                     <Image src={googleImage} width={20} height={20} alt='Google' />
                     Continuar com Google
                 </button>
             </motion.form>
-            <p onClick={() => router.push("/register")} className="cursor-pointer text-gray-600 mt-6 text-sm flex items-center gap-1">Quer criar uma conta ? <Login className="w-4 h-4" /> <span className="text-pink-400"> Entrar</span></p>
+            <Link 
+                href="/register"
+                className="cursor-pointer text-gray-600 mt-6 text-sm flex items-center gap-1">Quer criar uma conta ? <Login className="w-4 h-4" /> <span className="text-pink-400"> Entrar</span></Link>
         </div>
     )
 }
