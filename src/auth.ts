@@ -47,7 +47,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                     dbUser = User.create({
                         name: user.name,
                         email: user.email,
-                        image: user.image,
+                        image: user.image ?? null,
                     })
                 }
                 user.id = dbUser._id.toString()
