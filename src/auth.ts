@@ -3,6 +3,7 @@ import Credentials from "next-auth/providers/credentials"
 import connectDb from "./lib/db"
 import User from "./models/user.model"
 import bcrypt from "bcryptjs"
+import Google from "@auth/core/providers/google";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
     providers: [
@@ -37,10 +38,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         })
     ],
     callbacks: {
-        async signIn(user, account) {
+        async signIn({user, account}) {
             if (account?.provider == "google") {
-                await connectDb
-                let dbUser = await User.findOne({ email: user.emaisl })
+                if (!user.email) return false
+                await connectDb()
+                let dbUser = await User.findOne({ email: user.email })
                 if (!dbUser) {
                     dbUser = User.create({
                         name: user.name,
@@ -80,5 +82,5 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         strategy: "jwt",
         maxAge: 10 * 24 * 60 * 60
     },
-    secret: process.env.AUTH_SECRET
+    secret: process.env.BETTER_AUTH_SECRET
 })
