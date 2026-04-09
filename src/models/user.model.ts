@@ -7,7 +7,7 @@ interface IUser {
     password?: string;
     mobile?: string;
     role: "user" | "deliveryBoy" | "admin";
-    image: string;
+    image?: string;
 }
 
 const userSchema = new mongoose.Schema<IUser>({
@@ -32,6 +32,10 @@ const userSchema = new mongoose.Schema<IUser>({
         type: String,
         enum: ["user", "deliveryBoy", "admin"],
         default: "user",
+    },
+    image: {
+        type: String,
+        required: false,
     }
 }, { timestamps: true });
 

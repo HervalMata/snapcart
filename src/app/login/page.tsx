@@ -1,11 +1,10 @@
 "use client"
 
 import React, { useState } from 'react'
-import { ArrowLeft, Leaf, User, Mail, Lock, EyeOff, Eye, Login, Loader2 } from 'lucide-react'
-import { motion } from 'motion'
+import {  Leaf, Mail, Lock, EyeOff, Eye, LogIn, Loader2 } from 'lucide-react'
+import { motion } from 'motion/react'
 import Image from 'next/image'
 import googleImage from "@/assets/google.png"
-import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import { signIn, useSession } from 'next-auth/react'
 import Link from "next/link"
@@ -38,7 +37,7 @@ function Login() {
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen px-6 py-10 bg-white relative">
-            <motion.h1 
+            <motion.h1
                 initial={{
                     y: 10,
                     opacity: 0,
@@ -72,35 +71,35 @@ function Login() {
             >
                 <div className="relative">
                     <Mail className="absolute left-3.5 top-3.75 w-5 h-5 text-gray-400" />
-                    <input 
-                        type="email" 
-                        placeholder="Digite seu email" 
-                        className="w-full border border-gray-300 rounded-xl py-3 pl-10 pr-4 text-gray-800 focus:ring-2 focus:ring-pink-500 focus:outline-none" 
+                    <input
+                        type="email"
+                        placeholder="Digite seu email"
+                        className="w-full border border-gray-300 rounded-xl py-3 pl-10 pr-4 text-gray-800 focus:ring-2 focus:ring-pink-500 focus:outline-none"
                         onChange={(e) => setEmail(e.target.value)}
                         value={email}
                     />
                 </div>
                 <div className="relative">
                     <Lock className="absolute left-3.5 top-3.75  w-5 h-5 text-gray-400" />
-                    <input 
-                        type={showPassword ? "text" : "password"} 
-                        placeholder="Digite sua senha" 
-                        className="w-full border border-gray-300 rounded-xl py-3 pl-10 pr-4 text-gray-800 focus:ring-2 focus:ring-pink-500 focus:outline-none" 
+                    <input
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Digite sua senha"
+                        className="w-full border border-gray-300 rounded-xl py-3 pl-10 pr-4 text-gray-800 focus:ring-2 focus:ring-pink-500 focus:outline-none"
                         onChange={(e) => setPassword(e.target.value)}
                         value={password}
                     />
-                    { showPassword 
-                        ? <EyeOff className="absolute right-3 top-3.75 w-5 h-5 text-pink-500 cursor-pointer" onClick={() => setShowPassword(false)} /> 
+                    { showPassword
+                        ? <EyeOff className="absolute right-3 top-3.75 w-5 h-5 text-pink-500 cursor-pointer" onClick={() => setShowPassword(false)} />
                         : <Eye className="absolute right-3 top-3.75 w-5 h-5 text-pink-500 cursor-pointer" onClick={() => setShowPassword(true)} />
                     }
                 </div>
                 <button
                     type="submit"
                     disabled={!isFormValid || loading}
-                    className={`w-full font-semibold py-3b rounded-xl transition-all duration-200 shadow-md inline-flex items-center justify-center gap-2 ${
+                    className={`w-full font-semibold py-3 rounded-xl transition-all duration-200 shadow-md inline-flex items-center justify-center gap-2 ${
                                 isFormValid
                                     ? "bg-pink-600 hover:bg-pink-700 text-white"
-                                    : "bg-gray-300 text-gray-500 cursor-pointer-not-allowed"
+                                    : "bg-gray-300 text-gray-500 cursor-not-allowed"
                     }`}
                 >
                     {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Entrar"}
@@ -110,7 +109,7 @@ function Login() {
                     OU
                     <span className="flex-1 h-px bg-gray-200"></span>
                 </div>
-                <button 
+                <button
                     type="button"
                     disabled={loading}
                     onClick={() => signIn("google")}
@@ -119,9 +118,9 @@ function Login() {
                     Continuar com Google
                 </button>
             </motion.form>
-            <Link 
+            <Link
                 href="/register"
-                className="cursor-pointer text-gray-600 mt-6 text-sm flex items-center gap-1">Quer criar uma conta ? <Login className="w-4 h-4" /> <span className="text-pink-400"> Entrar</span></Link>
+                className="cursor-pointer text-gray-600 mt-6 text-sm flex items-center gap-1">Quer criar uma conta ? <LogIn className="w-4 h-4" /> <span className="text-pink-400"> Entrar</span></Link>
         </div>
     )
 }
