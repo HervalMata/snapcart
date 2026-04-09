@@ -1,12 +1,13 @@
 "use client"
 
 import React, {useState} from "react"
-import { motion } from {motion/react}
+import { motion } from "motion/react"
 import { User, UserCog, Bike, ArrowRight } from "lucide-react"
 import axios from "axios"
-import { redirect} from "next/navigation"
+import { useRouter } from "next/navigation"
 
 function EditRoleMobile() {
+    const router = useRouter()
     const [roles, setRoles] = useState([
         {id: "admin", label: "Admin", icon: UserCog},
         {id: "user", label: "Usuário", icon: User},
@@ -17,11 +18,11 @@ function EditRoleMobile() {
 
     const handleEdit = async () => {
         try {
-            const result = await axios.post("/api/user/edit-role-mobile", {
+            await axios.post("/api/user/edit-role-mobile", {
                 role: selectedRole,
                 mobile: mobile
-            }, {new: true})
-            redirect("/")
+            })
+            router.replace("/")
         } catch (error) {
             console.log(error)
         }
@@ -50,9 +51,11 @@ function EditRoleMobile() {
                     const Icon = role.icon
                     const isSelected = selectedRole == role.id
                     return (
-                        <motion.div
+                        <motion.button
+                            type="button"
                             key={role.id}
                             whileTop={{scale: 0.96}}
+                            aria-pressed={isSelected}
                             onClick={() => setSelectedRole(role.id)}
                             className={`flex flex-col items-center justify-center w-48 h-44 rounded-2xl border-2 transition-all ${
                                 isSelected
@@ -62,11 +65,11 @@ function EditRoleMobile() {
                         >
                             <Icon />
                             <span>{role.label}</span>
-                        </motion.div>
+                        </motion.button>
                     )
                 })}
             </div>    
-            <motion.div>
+            <motion.div
                 initial={{
                     opacity: 0,
                 }}
@@ -105,7 +108,7 @@ function EditRoleMobile() {
                 disabled={mobile !== 11 || !selectedRole}
                 onClick={handleEdit}
                 className={`inline-flex items-center gap-2 font-semibold py-3 px-8 rounded-2xl shadow-md transition-all duration-200 w-[200px] mt-20 ${
-                                selectedRole && mobile.length === 10
+                                selectedRole && mobile.length === 11
                                     ? "bg-pink-100 border-pink-600 text-white"
                                     : "bg-gray-300 text-gray-500 cursor-not-allowed"
                 }`}
