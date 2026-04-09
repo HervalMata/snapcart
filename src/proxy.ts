@@ -6,7 +6,7 @@ export async function proxy(req:NextRequest) {
 
     const publicRoutes = ["/login", "/register", "/api/auth", "/favicon.ico", "/_next"]
 
-    if (publicRoutes.some((path) => pathname.startswith(path))) {
+    if (publicRoutes.some((path) => pathname.startsWith(path))) {
         return NextResponse.next()
     }
 
@@ -22,7 +22,7 @@ export async function proxy(req:NextRequest) {
 }
 
 export const config = {
-    matcher: '/((?|api|_next/static|]_next/image|favico.ico'
+    matcher: '/((?|api|_next/static|_next/image|favico.ico).*)'
 }
 
 //export { auth as proxy } from "@/auth"
