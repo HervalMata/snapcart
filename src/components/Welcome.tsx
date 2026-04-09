@@ -77,11 +77,11 @@ function Welcome({ nextStep }: propType) {
                     duration: 2,
                     delay: 0.5
                 }}
-                className="inline-flex items-center gap-2 bg-pink-600 hover:bg-pink-700 text-white font-semibold py-3 px-8 rounded-2xl shadow-=md transition-all duration-200 mt-10"
+                className="inline-flex items-center gap-2 bg-pink-600 hover:bg-pink-700 text-white font-semibold py-3 px-8 rounded-2xl shadow-md transition-all duration-200 mt-10"
                 onClick={() => nextStep(2)}
             >
                 Próximo
-                <ArrowRight className="w-24 h-24 md:w-32 md:h-32 text-pink-600" />
+                <ArrowRight className="w-5 h-5 text-pink-600" />
             </motion.button>
         </div>
     )

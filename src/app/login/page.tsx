@@ -25,6 +25,7 @@ function Login() {
             const result = await signIn("credentials", {
                 email, password, redirect: false
             })
+            router.push("/register")
             if (result?.error) {
                 return
             }
@@ -112,7 +113,7 @@ function Login() {
                 <button
                     type="button"
                     disabled={loading}
-                    onClick={() => signIn("google")}
+                    onClick={() => signIn("google", {callbackUrl: "/"})}
                     className="w-full flex items-center justify-center gap-3 border border-gray-300 hover:bg-gray-50 py-3 rounded-xl text-gray-700 font-medium transition-all duration-200">
                     <Image src={googleImage} width={20} height={20} alt='Google' />
                     Continuar com Google
@@ -120,7 +121,7 @@ function Login() {
             </motion.form>
             <Link
                 href="/register"
-                className="cursor-pointer text-gray-600 mt-6 text-sm flex items-center gap-1">Quer criar uma conta ? <LogIn className="w-4 h-4" /> <span className="text-pink-400"> Entrar</span></Link>
+                className="cursor-pointer text-gray-600 mt-6 text-sm flex items-center gap-1">Quer criar uma conta ? <LogIn className="w-4 h-4" /> <span className="text-pink-400"> Cadastre-se</span></Link>
         </div>
     )
 }

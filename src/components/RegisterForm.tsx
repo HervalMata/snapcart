@@ -19,20 +19,23 @@ function RegisterForm({ previousStep }: propType) {
     const [password, setPassword] = useState("")
     const [showPassword,setShowPassword] = useState(false)
     const [loading, setLoading] = useState(false)
-    const [error, setError] = useState(false)
+    const [error, setError] = useState<string | null>(null)
     const router = useRouter()
 
     const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault()
         setLoading(true)
+        setError(null)
         try {
             const result = await axios.post("/api/auth/register", {
                 name, email, password
             })
+            router.push("/login")
             setLoading(false)
         } catch (error) {
             console.log(error)
             setLoading(false)
+            setError("Erro ao criar conta. Tente novamente.")
         }
     }
 
@@ -120,10 +123,11 @@ function RegisterForm({ previousStep }: propType) {
                     (() => {
                         const formValidation = name !== "" && email !== "" && password !== ""
                         return <button
-                            className={`w-full font-semibold py-3b rounded-xl transition-all duration-200 shadow-md inline-flex items-center justify-center gap-2 ${
+                            disabled={!formValidation || loading}
+                            className={`w-full font-semibold py-3 rounded-xl transition-all duration-200 shadow-md inline-flex items-center justify-center gap-2 ${
                                 formValidation
                                     ? "bg-pink-600 hover:bg-pink-700 text-white"
-                                    : "bg-gray-300 text-gray-500 cursor-pointer-not-allowed"
+                                    : "bg-gray-300 text-gray-500 cursor-not-allowed"
                             }`}
                         >
                             {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Cadastrar"}
@@ -138,13 +142,13 @@ function RegisterForm({ previousStep }: propType) {
                 <button
                     disabled={loading}
                     onClick={() => signIn("google")}
-
+                    type="button"
                     className="w-full flex items-center justify-center gap-3 border border-gray-300 hover:bg-gray-50 py-3 rounded-xl text-gray-700 font-medium transition-all duration-200">
                     <Image src={googleImage} width={20} height={20} alt='Google' />
                     Continuar com Google
                 </button>
             </motion.form>
-            <p onClick={() => router.push("/login")} className="cursor-pointer text-gray-600 mt-6 text-sm flex items-center gap-1">Já tem uma conta ? <LogIn className="w-4 h-4" /> <span className="text-pink-400"> Cadastrar-se</span></p>
+            <p onClick={() => router.push("/login")} className="cursor-pointer text-gray-600 mt-6 text-sm flex items-center gap-1">Já tem uma conta ? <LogIn className="w-4 h-4" /> <span className="text-pink-400"> Entrar</span></p>
         </div>
     )
 }
