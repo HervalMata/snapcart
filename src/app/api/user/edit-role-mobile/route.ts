@@ -18,9 +18,9 @@ export async function POST(req:NextRequest) {
 
         const user = await User.findByIdAndUpdate(
             session.user.id,
-            { role, mobile},
+            { role, mobile },
             { new: true, runValidators: true }
-        )
+        ).select("-password")
         if (!user) {
             return NextResponse.json(
                 {message: "Usuário não encontrado"},

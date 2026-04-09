@@ -105,7 +105,7 @@ function EditRoleMobile() {
                 transition={{
                     delay: 0.7,
                 }}
-                disabled={mobile !== 11 || !selectedRole}
+                disabled={mobile.length !== 11 || !selectedRole}
                 onClick={handleEdit}
                 className={`inline-flex items-center gap-2 font-semibold py-3 px-8 rounded-2xl shadow-md transition-all duration-200 w-[200px] mt-20 ${
                                 selectedRole && mobile.length === 11
