@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect } from "react"
 import mongoose from 'mongoose'
 import Link from "next/link"
-import {Search, ShoppingCartIcon, User, Package, X } from 'lucide-react'
+import {Search, ShoppingCartIcon, User, Package, X, LogOut } from 'lucide-react'
 import Image from "next/image"
 import { AnimatePresence, motion } from "framer-motion"
 import { signOut } from "@/auth"
@@ -24,13 +24,13 @@ function Nav({ user }: { user: IUser}) {
     const profileDropDown = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
-        const handleClickOutside = (e.MouseEvent) => {
+        const handleClickOutside = (e: MouseEvent) => {
             if (profileDropDown.current && !profileDropDown.current.contains(e.target as Node)) {
                 setOpen(false)
             }
-            document.addEventListener("mousedown", handleClickOutside)
-            return () => document.removeEventListener("mousedown", handleClickOutside)
         }
+        document.addEventListener("mousedown", handleClickOutside)
+        return () => document.removeEventListener("mousedown", handleClickOutside)
     }, [])
 
     return (

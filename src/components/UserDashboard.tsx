@@ -1,6 +1,13 @@
+import HeroSection from "./HeroSection"
+
+
 function UserDashboard() {
+    
+
     return (
-        <div></div>
+        <>
+            <HeroSection />
+        </>
     )
 }
 
