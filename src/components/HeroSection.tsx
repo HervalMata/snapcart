@@ -45,7 +45,7 @@ function HeroSection() {
     }, [])
 
     return (
-        <div className="relative w-[90%] mx-auto mt-32 nh-[80vh] rounded-3xl overflow-hidden shadow-2xl">
+        <div className="relative w-[90%] mx-auto mt-32 h-[80vh] rounded-3xl overflow-hidden shadow-2xl">
             <AnimatePresence mode="wait">
                 <motion.div
                     initial={{ opacity: 0 }}
@@ -82,9 +82,9 @@ function HeroSection() {
                         {slides[current].subtitle}
                     </p>
                     <motion.button
-                        whileHover={{scale: 1.9}}
-                        whilwTop={{scale: 0.96}}
-                        transition={{duration: 0.2}}
+                        whileHover={{ scale: 1.9 }}
+                        whilwTap={{ scale: 0.96 }}
+                        transition={{ duration: 0.2 }}
                         className="bg-white text-pink-700 hover:bg-pink-100 px-8 py-3 rounded-full font-semibold shadow-lg transition-all duration-300 flex items-center gap-2"
                     >
                         <ShoppingBasket className="w-5 h-5" />
@@ -92,10 +92,13 @@ function HeroSection() {
                     </motion.button>
                 </motion.div>
             </div>
-            <div>
+            <div className="absolute bottom-6 left-1/2 flex -translate-x-1/2 gap-2">
                 {slides.map((_, index) => (
                     <button 
                         key={index}
+                        type="button"
+                        aria-label={`Ir para o slide ${index + 1}`}
+                        onClick={() => setCurrent(index)}
                         className={`w-3 h-3 rounded-full transition-all ${
                             index === current ? "bg-white w-6" : "bg-white/50"
                         }`}
