@@ -81,7 +81,7 @@ function Welcome({ nextStep }: propType) {
                 onClick={() => nextStep(2)}
             >
                 Próximo
-                <ArrowRight className="w-5 h-5 text-pink-600" />
+                <ArrowRight className="w-5 h-5 text-white" />
             </motion.button>
         </div>
     )

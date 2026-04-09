@@ -4,6 +4,10 @@ import { auth } from "@/auth";
 import User from "@/models/user.model";
 import { redirect } from "next/navigation"
 import EditRoleMobile from "@/components/EditRoleMobile";
+import Nav from "@/components/Nav";
+import UserDashboard from "@/components/UserDashboard";
+import AdminDashboard from "@/components/AdminDashboard";
+import DeliveryBoy from "@/components/DeliveryBoy";
 
 export default async function Home() {
   await connectDb()
@@ -16,9 +20,18 @@ export default async function Home() {
   if (inComplete) {
     return <EditRoleMobile />
   }
+  const plainUser = JSON.parse(JSON.stringify(user))
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <Register />
-    </div>
+    <>
+      <Nav user={plainUser} />
+      {
+        user.role == "user" 
+          ? (<UserDashboard />) 
+          : user.role == "admin" 
+            ? (<AdminDashboard />) 
+            : <DeliveryBoy />
+      }
+    </>
   );
 }
