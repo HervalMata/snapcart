@@ -12,6 +12,11 @@ const uploadOnCloudinary = async (file: Blob): Promise<String | null> => {
     }
 
     try {
+        const maxBytes = 10 * 1024 * 1024
+        if (file.size > maxBytes) {
+            throw new Error(`Arquivo muito grande: ${file.size} bytes `);
+            
+        }
         const arrayBuffer = await file.arrayBuffer()
         const buffer = Buffer.from(arrayBuffer)
         return new Promise((resolve, reject) => {
