@@ -6,7 +6,7 @@ import Link from "next/link"
 import {Search, ShoppingCartIcon, User, Package, X, LogOut } from 'lucide-react'
 import Image from "next/image"
 import { AnimatePresence, motion } from "framer-motion"
-import { signOut } from "@/auth"
+import { signOut } from "next-auth"
 
 interface IUser {
     _id?: mongoose.Types.ObjectId;

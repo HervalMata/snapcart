@@ -83,7 +83,7 @@ function HeroSection() {
                     </p>
                     <motion.button
                         whileHover={{ scale: 1.9 }}
-                        whilwTap={{ scale: 0.96 }}
+                        whileTap={{ scale: 0.96 }}
                         transition={{ duration: 0.2 }}
                         className="bg-white text-pink-700 hover:bg-pink-100 px-8 py-3 rounded-full font-semibold shadow-lg transition-all duration-300 flex items-center gap-2"
                     >
