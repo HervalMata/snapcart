@@ -18,6 +18,19 @@ export async function proxy(req:NextRequest) {
         return NextResponse.redirect(loginUrl)
     }
 
+    const role = token.role
+    if (pathname.startsWith("/user") && role !== "user") {
+        return NextResponse.redirect(new URL("/unauthrized", req.url))
+    }
+    if (pathname.startsWith("/delivery") && role !== "deliveryBoy") {
+        return NextResponse.redirect(new URL("/unauthrized", req.url))
+    }
+
+    if (pathname.startsWith("/admin") && role !== "admin") {
+        return NextResponse.redirect(new URL("/unauthrized", req.url))
+    }
+
+
     return NextResponse.next()
 }
 
