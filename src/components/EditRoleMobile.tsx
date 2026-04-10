@@ -54,7 +54,7 @@ function EditRoleMobile() {
                         <motion.button
                             type="button"
                             key={role.id}
-                            whileTop={{scale: 0.96}}
+                            whileTap={{scale: 0.96}}
                             aria-pressed={isSelected}
                             onClick={() => setSelectedRole(role.id)}
                             className={`flex flex-col items-center justify-center w-48 h-44 rounded-2xl border-2 transition-all ${
