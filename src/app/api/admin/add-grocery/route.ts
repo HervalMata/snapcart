@@ -9,7 +9,7 @@ export async function POST(req:NextRequest) {
         const conn = await connectDb()
         if (!conn) {
             return NextResponse.json(
-                { message: "Serviço de banco de dados idisponivel" },
+                { message: "Serviço de banco de dados indisponivel" },
                 { status: 503 }
             )
         }

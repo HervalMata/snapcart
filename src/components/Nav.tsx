@@ -22,6 +22,7 @@ function Nav({ user }: { user: IUser}) {
     const [open, setOpen] = useState(false)
     const [searchBarOpen, setSearchBarOpen] = useState(false)
     const [menuOpen, setMenuOpen] = useState(false)
+    const [mounted, setMounted] = useState(false)
     const profileDropDown = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
@@ -34,14 +35,18 @@ function Nav({ user }: { user: IUser}) {
         return () => document.removeEventListener("mousedown", handleClickOutside)
     }, [])
 
-    const sidebar = menuOpen ? createPortal(
+    useEffect(() => {
+        setMounted(true)
+    }, [])
+
+    const sidebar = mounted && menuOpen ? createPortal(
         <AnimatePresence>
             <motion.div
                 initial={{ x: -100, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 exit={{ x: -100, opacity: 0 }}
-                transition={{ typr: "spring", stiffness: 100, damping: 14 }}
-                className="fixed top-0 left-0 h-full w-[75%] sm:w-[60%] z-9999 bg-linear-to-b from-pink-800/90 via-pink-700/80 to-pink-900/90 backdrop-blur-xl border-r botdrt-pink-400/20 shadow-[0_0_50px_-10px_rgba(0, 255, 100, 0.3)] flex flex-col p-6 text-white"
+                transition={{ type: "spring", stiffness: 100, damping: 14 }}
+                className="fixed top-0 left-0 h-full w-[75%] sm:w-[60%] z-9999 bg-linear-to-b from-pink-800/90 via-pink-700/80 to-pink-900/90 backdrop-blur-xl border-r border-pink-400/20 shadow-[0_0_50px_-10px_rgba(0, 255, 100, 0.3)] flex flex-col p-6 text-white"
             >
                 <div className="flex justify-between items-center mb-2">
                     <h1 className="font-extrabold text-2xl tracking-wide text-white/90">
@@ -69,7 +74,7 @@ function Nav({ user }: { user: IUser}) {
                 </div>
                 <div className="flex flex-col gap-3 font-medium mt-6">
                         <Link 
-                                href={""} 
+                                href={"/admin/add-grocery"} 
                                 className="flex items-center gap-3 p-3 rounded-lg bg-white/10 hover:bg-white/20 hover:pl-4 transition-all"
                             >
                                 <PlusCircle className="w-5 h-5" />
@@ -141,7 +146,7 @@ function Nav({ user }: { user: IUser}) {
                     <>
                         <div className="hidden md:flex items-center gap-4">
                             <Link 
-                                href={""} 
+                                href={"/admin/add-grocvery"} 
                                 className="flex items-center gap-2 bg-white text-pink-700 font-semibold px-4 py-2 rounded-full hover:bg-pink-100 transition-all"
                             >
                                 <PlusCircle className="w-5 h-5" />

@@ -19,7 +19,7 @@ export async function proxy(req:NextRequest) {
     }
 
     const role = token.role
-    if (pathname.startsWith("/user") && role !== "user") {
+    if (pathname.startsWith("/user") && role !["user", "deliveryBoy"].includes(role as string)) {
         return NextResponse.redirect(new URL("/unauthorized", req.url))
     }
     if (pathname.startsWith("/delivery") && role !== "deliveryBoy") {
