@@ -6,7 +6,13 @@ import { NextRequest, NextResponse } from "next/server"
 
 export async function POST(req:NextRequest) {
     try {
-        await connectDb()
+        const conn = await connectDb()
+        if (!conn) {
+            return NextResponse.json(
+                { message: "Serviço de banco de dados indisponivel" },
+                { status: 503 }
+            )
+        }
         const session = await auth()
         if (session?.user?.role !== "admin") {
             return NextResponse.json(
@@ -20,9 +26,16 @@ export async function POST(req:NextRequest) {
         const unit = formData.get("unit") 
         const price = formData.get("price") 
         const file = formData.get("file") as Blob | null
-        if (!name || !category || !unit || !price || !file) {
+
+        const isInvalidText =
+            typeof name !== "string" || !name.trim() ||
+            typeof category !== "string" || !category.trim() ||
+            typeof unit !== "string" || !unit.trim() ||
+            typeof price !== "string" || !price.trim()
+
+        if (isInvalidText ||!(file instanceof Blob) || file.size === 0) {
             return NextResponse.json(
-                { message: "Campos óobrigatórios faltando" },
+                { message: "Campos obrigatórios faltando" },
                 { status: 400}
             )
         }

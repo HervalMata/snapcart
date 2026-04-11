@@ -64,7 +64,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             }
 
             if (trigger == "update") {
-                token.role = session.role
+                const allowedRoles = ["user", "deliveryBoy", "admin"]
+                if (session.role && allowedRoles.includes(session.role)) {
+                    token.role = session.role
+                }
             }
             return token
         },
